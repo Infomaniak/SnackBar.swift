@@ -8,15 +8,18 @@
 import UIKit
 
 public struct SnackBarStyle {
+
     public init() {}
     // Container
     public var background: UIColor = .lightGray
     public var padding = 5
     public var inViewPadding = 20
     public var cornerRadius: CGFloat = 5
+    public var cornerStyle: CGFloat? = nil
     public var anchor: CGFloat = 0
     public var maxWidth: CGFloat?
     public var minWidth: CGFloat = 600
+
     // Label
     public var textColor: UIColor = .black
     public var font = UIFont.systemFont(ofSize: UIFontMetrics.default.scaledValue(for: 14))
