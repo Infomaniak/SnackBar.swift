@@ -68,8 +68,8 @@ open class SnackBar: UIView, SnackBarAction, SnackBarPresentable {
         self.duration = duration
         self.style = style
         super.init(frame: .zero)
+
         backgroundColor = style.background
-        layer.cornerRadius = style.cornerRadius
         setupView()
         setupSwipe()
         messageLabel.text = message
@@ -77,6 +77,20 @@ open class SnackBar: UIView, SnackBarAction, SnackBarPresentable {
 
     public required init?(coder: NSCoder) {
         return nil
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+
+        if let cornerStyle = style.cornerStyle {
+            if #available(iOS 26.0, *) {
+                cornerConfiguration = .corners(radius: UICornerRadius.fixed(cornerStyle))
+            } else {
+                layer.cornerRadius = cornerStyle
+            }
+        } else {
+            layer.cornerRadius = style.cornerRadius
+        }
     }
 
     private func constraintSuperView(with superview: UIView) {
@@ -159,7 +173,6 @@ open class SnackBar: UIView, SnackBarAction, SnackBarPresentable {
     public func show() {
         constraintSuperView(with: contextView)
         animation(with: -(CGFloat(style.padding) + style.anchor)) { _ in
-
             if self.duration != .infinite {
                 self.dismissTimer = Timer(
                     timeInterval: TimeInterval(self.duration.value),
